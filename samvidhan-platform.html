@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samvidhan | Indian Constitution Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Mukta:wght@300;400;600;700&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.4/babel.min.js"></script>
+<style>
+:root {
+  --saffron: #FF671F;
+  --green: #046A38;
+  --navy: #0A1628;
+  --navy-l: #112240;
+  --gold: #C9A84C;
+  --cream: #FDF6E3;
+  --muted: rgba(253,246,227,0.55);
+  --border: rgba(201,168,76,0.18);
+  --glass: rgba(255,255,255,0.04);
+  --r: 12px;
+  --sw: 250px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Mukta',sans-serif; background:var(--navy); color:var(--cream); overflow-x:hidden; }
+::-webkit-scrollbar { width:5px; } ::-webkit-scrollbar-thumb { background:rgba(201,168,76,0.3); border-radius:3px; }
+h1,h2,h3,h4 { font-family:'Playfair Display',serif; }
+@keyframes spin { to{transform:rotate(360deg);} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(18px);} to{opacity:1;transform:translateY(0);} }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
+.fu { animation:fadeUp 0.45s ease both; }
+.fu1 { animation:fadeUp 0.45s 0.1s ease both; }
+.fu2 { animation:fadeUp 0.45s 0.2s ease both; }
+.fu3 { animation:fadeUp 0.45s 0.3s ease both; }
+.card { background:var(--glass); border:1px solid var(--border); border-radius:var(--r); transition:border-color .2s,transform .2s,box-shadow .2s; }
+.card:hover { border-color:rgba(201,168,76,.4); transform:translateY(-2px); box-shadow:0 12px 40px rgba(0,0,0,.3); }
+.btn { display:inline-flex; align-items:center; gap:8px; padding:9px 18px; border-radius:8px; font-family:'Mukta',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; border:none; }
+.btn-p { background:linear-gradient(135deg,var(--saffron),#E85A0A); color:#fff; }
+.btn-p:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(255,103,31,.4); }
+.btn-o { background:transparent; border:1px solid var(--gold); color:var(--gold); }
+.btn-o:hover { background:var(--gold); color:var(--navy); }
+.btn-g { background:transparent; border:1px solid var(--border); color:var(--muted); }
+.btn-g:hover { border-color:rgba(201,168,76,.4); color:var(--cream); }
+.badge { display:inline-block; padding:3px 9px; border-radius:20px; font-size:10px; font-weight:700; }
+.g2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+.g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.g4 { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.tc { height:3px; background:linear-gradient(to right, var(--saffron) 33%, #fff 33%, #fff 66%, var(--green) 66%); border-radius:2px; }
+@media(max-width:1100px) { .g4 { grid-template-columns:repeat(2,1fr); } .g3 { grid-template-columns:repeat(2,1fr); } }
+@media(max-width:700px) { .g2,.g3,.g4 { grid-template-columns:1fr; } }
+/* Sidebar */
+.sidebar { position:fixed; left:0;top:0;bottom:0; width:var(--sw); background:rgba(5,12,25,.97); border-right:1px solid var(--border); z-index:100; display:flex; flex-direction:column; overflow:hidden; }
+.sl { display:flex; align-items:center; gap:12px; padding:18px 16px 14px; }
+.ck { width:44px;height:44px; border:2px solid var(--gold); border-radius:50%; position:relative; animation:spin 30s linear infinite; flex-shrink:0; }
+.ck div.sp { position:absolute; width:1.5px; height:50%; background:var(--gold); top:0;left:50%; transform-origin:bottom center; opacity:0.7; }
+.ck-c { position:absolute; width:8px;height:8px; background:var(--gold); border-radius:50%; top:50%;left:50%; transform:translate(-50%,-50%); }
+.lo-d { display:block; font-family:'Noto Serif Devanagari',serif; font-size:19px; color:var(--gold); line-height:1; }
+.lo-e { display:block; font-family:'Playfair Display',serif; font-size:12px; font-weight:700; letter-spacing:2px; color:var(--cream); margin-top:2px; }
+.lo-t { display:block; font-size:9px; color:var(--muted); margin-top:2px; }
+.rp { padding:12px 16px; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.rp-l { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:7px; }
+.rg { display:grid; grid-template-columns:1fr 1fr; gap:5px; }
+.rb { display:flex; align-items:center; gap:5px; padding:5px 8px; border-radius:6px; font-family:'Mukta',sans-serif; font-size:11px; font-weight:600; cursor:pointer; border:1px solid rgba(201,168,76,.2); background:transparent; color:var(--muted); transition:all .2s; text-align:left; }
+.rb:hover { background:rgba(201,168,76,.06); color:var(--cream); } .rb.active { background:rgba(201,168,76,.1); font-weight:700; }
+.sn { flex:1; overflow-y:auto; padding:4px 0; } .sn::-webkit-scrollbar { width:3px; }
+.ngl { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:rgba(201,168,76,.4); padding:10px 18px 4px; }
+.ni { display:flex; align-items:center; gap:10px; width:100%; padding:9px 16px; background:transparent; border:none; border-left:2px solid transparent; color:var(--muted); font-family:'Mukta',sans-serif; font-size:13px; cursor:pointer; transition:all .2s; text-align:left; }
+.ni:hover { background:rgba(201,168,76,.05); color:var(--cream); border-left-color:rgba(201,168,76,.3); }
+.ni.active { background:rgba(201,168,76,.1); color:var(--gold); border-left-color:var(--saffron); font-weight:600; }
+.nb { background:var(--saffron); color:#fff; font-size:9px; padding:2px 6px; border-radius:10px; font-weight:700; margin-left:auto; }
+.sf { padding:10px 16px; border-top:1px solid var(--border); }
+.sf-t { font-size:10px; color:var(--muted); text-align:center; margin-top:7px; }
+/* Topbar */
+.tb { position:sticky;top:0;z-index:50; height:60px; background:rgba(5,12,25,.92); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 26px; gap:14px; }
+.tb-l { display:flex; align-items:center; gap:12px; }
+.tb-title { font-family:'Playfair Display',serif; font-size:17px; }
+.tb-bc { font-size:11px; color:var(--muted); }
+.tb-r { display:flex; align-items:center; gap:10px; }
+.si { background:rgba(255,255,255,.05); border:1px solid var(--border); border-radius:22px; padding:7px 14px 7px 30px; color:var(--cream); font-family:'Mukta',sans-serif; font-size:13px; width:190px; outline:none; transition:all .2s; }
+.si::placeholder { color:var(--muted); } .si:focus { border-color:rgba(201,168,76,.5); width:220px; }
+.sw-w { position:relative; } .si-icon { position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:13px; pointer-events:none; }
+.uc { display:flex; align-items:center; gap:9px; background:rgba(255,255,255,.04); border:1px solid var(--border); border-radius:22px; padding:3px 12px 3px 4px; }
+.ua { width:30px;height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.ur { font-size:12px; font-weight:700; color:var(--gold); line-height:1; }
+.un { font-size:10px; color:var(--muted); }
+/* Main */
+.app-root { display:flex; min-height:100vh; }
+.app-bg { position:fixed;inset:0; background:radial-gradient(ellipse 80% 50% at 15% 20%,rgba(255,103,31,.07),transparent 60%),radial-gradient(ellipse 60% 50% at 85% 80%,rgba(4,106,56,.06),transparent 60%); pointer-events:none; z-index:0; }
+.app-main { flex:1; margin-left:var(--sw); display:flex; flex-direction:column; min-height:100vh; position:relative; z-index:1; }
+/* Dashboard */
+.dh { position:relative; background:linear-gradient(135deg,rgba(255,103,31,.12),rgba(10,22,40,.8) 50%,rgba(4,106,56,.1)); border:1px solid var(--border); border-radius:20px; padding:36px; margin-bottom:24px; overflow:hidden; display:flex; gap:36px; align-items:center; }
+.dh-bg { position:absolute;inset:0; background:radial-gradient(ellipse at 80% 50%,rgba(201,168,76,.06),transparent 70%); pointer-events:none; }
+.hb { display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.06); border:1px solid var(--border); border-radius:20px; padding:4px 12px; font-size:11px; color:var(--muted); margin-bottom:16px; }
+.td { width:7px;height:7px; border-radius:50%; }
+.ht { font-family:'Playfair Display',serif; display:flex; flex-direction:column; margin-bottom:12px; }
+.dev { font-family:'Noto Serif Devanagari',serif; font-size:36px; color:var(--gold); line-height:1; }
+.ht span:last-child { font-size:30px; color:var(--cream); }
+.hs { font-size:13px; color:var(--muted); line-height:1.7; max-width:400px; margin-bottom:20px; }
+.hq { flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:14px; max-width:200px; }
+.ck-lg { width:90px;height:90px; border:2px solid var(--gold); border-radius:50%; position:relative; animation:spin 40s linear infinite; flex-shrink:0; }
+.ck-lg .sp { position:absolute; width:1.5px; height:50%; background:var(--gold); top:0;left:50%; transform-origin:bottom center; opacity:0.6; }
+.ck-lg-c { position:absolute;width:12px;height:12px;background:var(--gold);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%); }
+.hpe { font-family:'Playfair Display',serif; font-style:italic; font-size:11px; color:rgba(201,168,76,.7); text-align:center; line-height:1.6; }
+.sc { display:flex;align-items:center;gap:12px; padding:16px 18px; }
+.si2 { width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0; }
+.sv { font-family:'Playfair Display',serif;font-size:26px;font-weight:700;line-height:1; }
+.sl2 { font-size:12px;color:var(--muted);margin-top:2px; }
+.dg { display:grid;grid-template-columns:1fr 280px;gap:22px;margin-bottom:20px; }
+.qg { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
+.qc { display:flex;align-items:center;gap:11px;padding:13px 14px;background:var(--glass);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;text-align:left;width:100%;transition:all .2s;font-family:inherit;color:var(--cream); }
+.qc:hover { border-color:rgba(201,168,76,.4);background:rgba(255,255,255,.06);transform:translateY(-1px); }
+.qi { width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0; }
+.qt { font-weight:700;font-size:13px; } .qd { font-size:11px;color:var(--muted); }
+.ic { padding:17px 19px; }
+.ic-t { font-size:12px;font-weight:700;color:var(--gold);margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid var(--border);font-family:'Mukta',sans-serif; }
+.fr { display:flex;justify-content:space-between;align-items:center;font-size:13px; }
+.fk { color:var(--muted); } .fv { color:var(--cream);font-weight:600; }
+.kws { display:flex;flex-wrap:wrap;gap:6px; }
+.kw { background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);color:var(--gold);padding:4px 10px;border-radius:16px;font-size:11px;font-weight:600; }
+/* Preamble */
+.pd { padding:0;overflow:hidden;background:linear-gradient(145deg,rgba(201,168,76,.06),rgba(255,255,255,.02)); }
+.dh2 { display:flex;align-items:center;gap:18px;padding:24px 28px 18px;border-bottom:1px solid var(--border); }
+.as { width:50px;height:50px;border:2px solid var(--gold);border-radius:50%;position:relative;animation:spin 20s linear infinite;flex-shrink:0; }
+.hd { font-family:'Noto Serif Devanagari',serif;font-size:19px;color:var(--gold); }
+.he { font-family:'Playfair Display',serif;font-size:12px;letter-spacing:1.5px;color:var(--cream);margin-top:3px; }
+.pt { font-family:'Playfair Display',serif;font-size:15px;line-height:2;color:var(--cream);text-align:justify; }
+.pk { font-weight:700;border-bottom:2px solid;cursor:pointer;transition:all .2s;padding-bottom:1px; }
+.pk:hover { opacity:.85; }
+/* Rights */
+.rl { display:flex;flex-direction:column;gap:8px; }
+.rc { display:flex;align-items:center;gap:11px;padding:12px 14px;width:100%;text-align:left;cursor:pointer;font-family:inherit;color:var(--cream);transition:all .2s;background:var(--glass);border:1px solid var(--border);border-radius:var(--r); }
+.rc.active { transform:translateX(3px); }
+.rci { width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0; }
+.ra { font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase; }
+.rti { font-size:13px;font-weight:600;margin-top:1px; }
+.rd { display:flex;flex-direction:column;animation:fadeUp .3s ease;overflow:hidden; }
+.rdh { display:flex;align-items:center;gap:14px;padding:20px 22px; }
+.rdi { width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:25px; }
+/* Quiz */
+.qp { display:flex;align-items:center;justify-content:center;font-size:14px; }
+.qopt { display:flex;align-items:center;gap:12px;padding:13px 16px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;cursor:pointer;font-family:'Mukta',sans-serif;font-size:13px;color:var(--cream);text-align:left;transition:all .2s;width:100%; }
+.qopt:hover:not(.oc):not(.ow):not(.od) { border-color:rgba(201,168,76,.5);background:rgba(201,168,76,.06); }
+.oc { border-color:#046A38 !important;background:rgba(4,106,56,.15) !important; }
+.ow { border-color:#8B0000 !important;background:rgba(139,0,0,.12) !important; }
+.od { opacity:.45; }
+.ol { width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0; }
+.qe { display:flex;align-items:flex-start;gap:11px;padding:14px;background:rgba(255,255,255,.04);border:1px solid;border-radius:10px;margin-top:14px;font-size:13px;color:rgba(253,246,227,.85);line-height:1.6; }
+.qdot { width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0; }
+@media(max-width:900px) { .app-main { margin-left:0; } }
+@media(max-width:1100px) { .hq { display:none; } .dg { grid-template-columns:1fr; } }
+@media(max-width:700px) { .tb { padding:0 14px; } .qg { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useCallback } = React;
+
+const DATA = {
+  roles: {
+    citizen: { label:'Citizen', color:'#046A38', icon:'🏛️' },
+    educator: { label:'Educator', color:'#FF671F', icon:'📚' },
+    legal_expert: { label:'Legal Expert', color:'#C9A84C', icon:'⚖️' },
+    admin: { label:'Admin', color:'#000080', icon:'🛡️' },
+  },
+  rights: [
+    { art:'Art. 12–18', title:'Right to Equality', icon:'⚖️', color:'#FF671F', desc:'Guarantees equality before law, prohibits discrimination on grounds of religion, race, caste, sex. Abolishes untouchability and titles.', pts:['Equality before law (Art. 14)','Prohibition of discrimination (Art. 15)','Equality of opportunity in public employment (Art. 16)','Abolition of untouchability (Art. 17)','Abolition of titles (Art. 18)'] },
+    { art:'Art. 19–22', title:'Right to Freedom', icon:'🕊️', color:'#C9A84C', desc:'Protects six freedoms: speech & expression, assembly, association, movement, residence, and profession. Covers rights upon arrest.', pts:['Freedom of speech & expression (Art. 19(1)(a))','Freedom of peaceful assembly (Art. 19(1)(b))','Freedom to form associations (Art. 19(1)(c))','Freedom of movement (Art. 19(1)(d))','Protection against arbitrary arrest (Art. 22)'] },
+    { art:'Art. 23–24', title:'Right Against Exploitation', icon:'🚫', color:'#046A38', desc:'Prohibits traffic in human beings, forced labour, and employment of children below 14 years in factories, mines or hazardous occupations.', pts:['Prohibition of human trafficking (Art. 23)','Prohibition of forced labour (Art. 23)','Prohibition of child labour below age 14 (Art. 24)'] },
+    { art:'Art. 25–28', title:'Right to Freedom of Religion', icon:'🕌', color:'#000080', desc:'Grants freedom of conscience, and free profession, practice and propagation of religion for all citizens.', pts:['Freedom of conscience (Art. 25)','Freedom to manage religious affairs (Art. 26)','No taxes for religious promotion (Art. 27)','No religious instruction in state institutions (Art. 28)'] },
+    { art:'Art. 29–30', title:'Cultural & Educational Rights', icon:'🎓', color:'#8B0000', desc:'Protects rights of minorities to conserve their culture, language, script, and to establish educational institutions.', pts:['Protection of interests of minorities (Art. 29)','Right of minorities to establish educational institutions (Art. 30)'] },
+    { art:'Art. 32', title:'Right to Constitutional Remedies', icon:'🏛️', color:'#4B0082', desc:'The "Heart and Soul" of the Constitution. Empowers citizens to move the Supreme Court for enforcement of Fundamental Rights via writs.', pts:['Habeas Corpus — produce the body','Mandamus — command to do duty','Prohibition — stop excess of jurisdiction','Quo Warranto — by what authority','Certiorari — quash inferior court order'] },
+  ],
+  duties: [
+    'To abide by the Constitution and respect its ideals, institutions, National Flag and National Anthem.',
+    'To cherish and follow the noble ideals which inspired our national struggle for freedom.',
+    'To uphold and protect the sovereignty, unity and integrity of India.',
+    'To defend the country and render national service when called upon.',
+    'To promote harmony and the spirit of common brotherhood amongst all people of India.',
+    'To value and preserve the rich heritage of our composite culture.',
+    'To protect and improve the natural environment including forests, lakes, rivers and wildlife.',
+    'To develop the scientific temper, humanism and the spirit of inquiry and reform.',
+    'To safeguard public property and to abjure violence.',
+    'To strive towards excellence in all spheres of individual and collective activity.',
+    'If a parent or guardian, to provide education opportunities for child between age 6–14.',
+  ],
+  quiz: [
+    { q:"Who is known as the 'Father of the Indian Constitution'?", opts:["Jawaharlal Nehru","Mahatma Gandhi","Dr. B.R. Ambedkar","Sardar Patel"], ans:2, exp:"Dr. B.R. Ambedkar was the Chairman of the Drafting Committee and is rightly called the Father of the Indian Constitution." },
+    { q:"On which date did the Indian Constitution come into force?", opts:["15 August 1947","26 November 1949","26 January 1950","2 October 1950"], ans:2, exp:"The Constitution was adopted on 26 Nov 1949 but came into effect on 26 January 1950, celebrated as Republic Day." },
+    { q:"Which Article is called the 'Heart and Soul' of the Constitution?", opts:["Article 14","Article 19","Article 21","Article 32"], ans:3, exp:"Article 32 (Right to Constitutional Remedies) was called 'Heart and Soul' of the Constitution by Dr. Ambedkar." },
+    { q:"Which writ is issued to produce a detained person before a court?", opts:["Mandamus","Habeas Corpus","Certiorari","Quo Warranto"], ans:1, exp:"Habeas Corpus (meaning 'produce the body') is issued to ensure a person is not unlawfully detained." },
+    { q:"Fundamental Duties were added by which Amendment?", opts:["24th Amendment","42nd Amendment","44th Amendment","52nd Amendment"], ans:1, exp:"The 42nd Constitutional Amendment (1976) added Fundamental Duties under Article 51-A (Part IV-A)." },
+    { q:"The word 'SECULAR' was added to the Preamble by which Amendment?", opts:["40th Amendment","42nd Amendment","44th Amendment","46th Amendment"], ans:1, exp:"The 42nd Constitutional Amendment (1976) added 'Socialist', 'Secular' and 'Integrity' to the Preamble." },
+    { q:"How many Fundamental Rights are there in the Indian Constitution?", opts:["5","6","7","8"], ans:1, exp:"Currently there are 6 Fundamental Rights. Originally there were 7, but the Right to Property was removed by the 44th Amendment (1978)." },
+    { q:"Under which article is Right to Education guaranteed?", opts:["Article 21","Article 21-A","Article 23","Article 29"], ans:1, exp:"Article 21-A, inserted by the 86th Amendment (2002), guarantees free and compulsory education for children aged 6-14." },
+  ],
+  amendments: [
+    { n:"1st (1951)", hl:true, d:"Added 9th Schedule; reasonable restrictions on free speech" },
+    { n:"7th (1956)", hl:false, d:"Reorganization of states on linguistic basis" },
+    { n:"24th (1971)", hl:false, d:"Parliament's power to amend any part of Constitution" },
+    { n:"42nd (1976)", hl:true, d:"Added 'Socialist', 'Secular', 'Integrity' to Preamble; most comprehensive amendment" },
+    { n:"44th (1978)", hl:false, d:"Restored judicial review; Right to property removed from Fundamental Rights" },
+    { n:"52nd (1985)", hl:false, d:"Anti-defection law added (10th Schedule)" },
+    { n:"61st (1988)", hl:false, d:"Voting age lowered from 21 to 18 years" },
+    { n:"73rd (1992)", hl:true, d:"Constitutional status to Panchayati Raj institutions" },
+    { n:"86th (2002)", hl:false, d:"Right to Education added as Fundamental Right (Art. 21-A)" },
+    { n:"101st (2016)", hl:true, d:"Goods and Services Tax (GST) introduced" },
+    { n:"103rd (2019)", hl:false, d:"10% reservation for Economically Weaker Sections (EWS)" },
+    { n:"106th (2023)", hl:true, d:"33% reservation for women in Parliament and state legislatures" },
+  ],
+  timeline:[
+    {yr:'1946',ev:'Constituent Assembly formed (December 9)'},
+    {yr:'1947',ev:"India gains Independence (Aug 15). Drafting Committee formed under Dr. B.R. Ambedkar (Aug 29)"},
+    {yr:'1948',ev:'Draft Constitution presented by Dr. Ambedkar (February 21)'},
+    {yr:'1949',ev:'Constitution adopted by Constituent Assembly (November 26)'},
+    {yr:'1950',ev:'Constitution comes into force — First Republic Day (January 26)'},
+    {yr:'1951',ev:'First Amendment — 9th Schedule created, restrictions on free speech'},
+    {yr:'1976',ev:"42nd Amendment — Preamble updated; 'Socialist', 'Secular' added"},
+    {yr:'1978',ev:'44th Amendment — Right to Property removed from Fundamental Rights'},
+    {yr:'1992',ev:'73rd & 74th Amendments — Panchayati Raj gets constitutional status'},
+    {yr:'2002',ev:'86th Amendment — Right to Education as Fundamental Right'},
+    {yr:'2016',ev:'101st Amendment — GST introduced'},
+    {yr:'2023',ev:"106th Amendment — 33% reservation for women in Parliament"},
+  ],
+  cases:[
+    {n:'Kesavananda Bharati v. State of Kerala',yr:1973,sig:'Established the Basic Structure Doctrine — Parliament cannot amend the Constitution to destroy its basic structure.',area:'Constitutional Amendment'},
+    {n:'Maneka Gandhi v. Union of India',yr:1978,sig:'Expanded Article 21 to include right to live with dignity; introduced principle of due process.',area:'Fundamental Rights'},
+    {n:'Indira Sawhney v. Union of India',yr:1992,sig:'Upheld 27% OBC reservations; capped total reservations at 50%; excluded creamy layer.',area:'Equality & Reservations'},
+    {n:'S.R. Bommai v. Union of India',yr:1994,sig:"Curtailed arbitrary imposition of President's Rule under Article 356; federalism is a basic feature.",area:'Federalism'},
+    {n:'K.S. Puttaswamy v. Union of India',yr:2017,sig:'Unanimously declared Right to Privacy as a Fundamental Right under Article 21.',area:'Fundamental Rights'},
+  ],
+  posts:[
+    {id:1,u:'Citizen_A',role:'Citizen',av:'👤',time:'2h ago',title:'Is Article 21 the most powerful fundamental right?',body:'The Supreme Court has consistently expanded the scope of Article 21 to include the right to livelihood, privacy, health, education, and speedy trial...',r:12,l:34},
+    {id:2,u:'Adv_Meera',role:'Legal Expert',av:'⚖️',time:'5h ago',title:'Understanding the Basic Structure Doctrine',body:"After Kesavananda Bharati (1973), Parliament cannot amend the Constitution in a way that destroys its basic structure. But what exactly is that structure?",r:8,l:56},
+    {id:3,u:'Prof_Kumar',role:'Educator',av:'📚',time:'1d ago',title:'DPSPs vs Fundamental Rights — A historical debate',body:'When the Constitution was framed, there was significant debate about which should take precedence. The 42nd Amendment and Minerva Mills settled it...',r:19,l:78},
+  ],
+};
+
+const navItems = [
+  {id:'dashboard',ic:'⊞',lb:'Dashboard',gr:'main'},
+  {id:'preamble',ic:'📜',lb:'Preamble',gr:'learn'},
+  {id:'rights',ic:'⚖️',lb:'Fundamental Rights',gr:'learn'},
+  {id:'duties',ic:'🎯',lb:'Fundamental Duties',gr:'learn'},
+  {id:'dpsp',ic:'🗂️',lb:'Directive Principles',gr:'learn'},
+  {id:'amendments',ic:'📋',lb:'Amendments',gr:'learn'},
+  {id:'timeline',ic:'🕐',lb:'Timeline',gr:'learn'},
+  {id:'quiz',ic:'🧠',lb:'Quiz',badge:'New',gr:'engage'},
+  {id:'discuss',ic:'💬',lb:'Discussions',gr:'engage'},
+  {id:'admin',ic:'🛡️',lb:'Admin Panel',gr:'admin',rr:'admin'},
+  {id:'educator',ic:'📚',lb:'Educator Hub',gr:'admin',rr:['educator','admin']},
+  {id:'legal',ic:'🏛️',lb:'Legal Insights',gr:'admin',rr:['legal_expert','admin']},
+];
+
+/* === SIDEBAR === */
+function Sidebar({role, setRole, active, setActive}) {
+  const grLabels = {main:null,learn:'Constitutional Learning',engage:'Interactive',admin:'Management'};
+  const visible = navItems.filter(i => !i.rr || (Array.isArray(i.rr)?i.rr.includes(role):i.rr===role));
+  const groups = ['main','learn','engage','admin'];
+  return (
+    <aside className="sidebar">
+      <div className="sl">
+        <div className="ck">
+          {[...Array(24)].map((_,i)=><div key={i} className="sp" style={{transform:`rotate(${i*15}deg)`}}/>)}
+          <div className="ck-c"/>
+        </div>
+        <div>
+          <span className="lo-d">संविधान</span>
+          <span className="lo-e">SAMVIDHAN</span>
+          <span className="lo-t">India's Constitution Platform</span>
+        </div>
+      </div>
+      <div className="tc" style={{margin:'0 16px'}}/>
+      <div className="rp">
+        <p className="rp-l">Your Role</p>
+        <div className="rg">
+          {Object.entries(DATA.roles).map(([k,r])=>(
+            <button key={k} className={`rb ${role===k?'active':''}`}
+              style={role===k?{borderColor:r.color,color:r.color}:{}}
+              onClick={()=>setRole(k)}>
+              <span>{r.icon}</span><span>{r.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <nav className="sn">
+        {groups.map(g=>{
+          const its = visible.filter(i=>i.gr===g);
+          if(!its.length) return null;
+          return <div key={g}>
+            {grLabels[g] && <p className="ngl">{grLabels[g]}</p>}
+            {its.map(it=>(
+              <button key={it.id} className={`ni ${active===it.id?'active':''}`}
+                onClick={()=>setActive(it.id)}>
+                <span style={{fontSize:15,width:18,textAlign:'center'}}>{it.ic}</span>
+                <span style={{flex:1}}>{it.lb}</span>
+                {it.badge && <span className="nb">{it.badge}</span>}
+              </button>
+            ))}
+          </div>;
+        })}
+      </nav>
+      <div className="sf">
+        <div className="tc"/>
+        <p className="sf-t">© 2024 Samvidhan Platform</p>
+      </div>
+    </aside>
+  );
+}
+
+/* === TOPBAR === */
+function Topbar({role,active}) {
+  const r = DATA.roles[role];
+  const labels = {dashboard:'Dashboard',preamble:'The Preamble',rights:'Fundamental Rights',duties:'Fundamental Duties',dpsp:'Directive Principles',amendments:'Amendments',timeline:'Timeline',quiz:'Interactive Quiz',discuss:'Discussions',admin:'Admin Panel',educator:'Educator Hub',legal:'Legal Insights'};
+  return (
+    <header className="tb">
+      <div className="tb-l">
+        <div><p className="tb-title">{labels[active]||'Dashboard'}</p>
+          <p className="tb-bc">Samvidhan / <span style={{color:'var(--gold)'}}>{labels[active]}</span></p></div>
+      </div>
+      <div className="tb-r">
+        <div className="sw-w">
+          <span className="si-icon">🔍</span>
+          <input className="si" placeholder="Search constitution..."/>
+        </div>
+        <div className="uc">
+          <div className="ua" style={{background:`linear-gradient(135deg,${r.color},${r.color}99)`}}>{r.icon}</div>
+          <div><p className="ur">{r.label}</p><p className="un">Demo User</p></div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+/* === DASHBOARD === */
+function Dashboard({role, go}) {
+  const r = DATA.roles[role];
+  const stats = [{lb:'Articles',v:'395',ic:'📄',c:'#FF671F'},{lb:'Schedules',v:'12',ic:'📋',c:'#C9A84C'},{lb:'Parts',v:'22',ic:'🗂️',c:'#046A38'},{lb:'Amendments',v:'106',ic:'✏️',c:'#000080'}];
+  const ql = [{id:'preamble',ic:'📜',t:'Preamble',d:'Foundation of Constitution',c:'#FF671F'},{id:'rights',ic:'⚖️',t:'Fundamental Rights',d:'Articles 12–35',c:'#C9A84C'},{id:'duties',ic:'🎯',t:'Duties',d:'Article 51-A',c:'#046A38'},{id:'dpsp',ic:'🗂️',t:'DPSPs',d:'Part IV principles',c:'#000080'},{id:'quiz',ic:'🧠',t:'Take Quiz',d:'Test your knowledge',c:'#8B0000'},{id:'timeline',ic:'🕐',t:'Timeline',d:'Constitutional history',c:'#4B0082'}];
+  return (
+    <div style={{padding:'28px 32px'}}>
+      <div className="dh fu">
+        <div className="dh-bg"/>
+        <div style={{flex:1,position:'relative'}}>
+          <div className="hb">
+            <span className="td" style={{background:'var(--saffron)'}}/>
+            <span className="td" style={{background:'#ccc'}}/>
+            <span className="td" style={{background:'var(--green)'}}/>
+            <span>Republic of India — 26 January 1950</span>
+          </div>
+          <div className="ht">
+            <span className="dev">संविधान</span>
+            <span>of India</span>
+          </div>
+          <p className="hs">Explore the supreme law of India — its principles, rights, duties, and democratic framework. Viewing as <strong style={{color:r.color}}>{r.icon} {r.label}</strong></p>
+          <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
+            <button className="btn btn-p" onClick={()=>go('preamble')}>📜 Read Preamble</button>
+            <button className="btn btn-o" onClick={()=>go('quiz')}>🧠 Take Quiz</button>
+          </div>
+        </div>
+        <div className="hq">
+          <div className="ck-lg">
+            {[...Array(24)].map((_,i)=><div key={i} className="sp" style={{transform:`rotate(${i*15}deg)`}}/>)}
+            <div className="ck-lg-c"/>
+          </div>
+          <p className="hpe">"We, the People of India, having solemnly resolved to constitute India into a Sovereign Socialist Secular Democratic Republic..."</p>
+        </div>
+      </div>
+      <div className="g4 fu1" style={{marginBottom:24}}>
+        {stats.map(s=>(
+          <div key={s.lb} className="card sc">
+            <div className="si2" style={{background:`${s.c}22`,color:s.c}}>{s.ic}</div>
+            <div><p className="sv" style={{color:s.c}}>{s.v}</p><p className="sl2">{s.lb}</p></div>
+          </div>
+        ))}
+      </div>
+      <div className="dg">
+        <div className="fu2">
+          <h3 style={{fontFamily:'Playfair Display',fontSize:19,marginBottom:14}}>Explore Constitution</h3>
+          <div className="qg">
+            {ql.map(l=>(
+              <button key={l.id} className="qc" onClick={()=>go(l.id)}>
+                <span className="qi" style={{background:`${l.c}22`,color:l.c}}>{l.ic}</span>
+                <div><p className="qt">{l.t}</p><p className="qd">{l.d}</p></div>
+                <span style={{marginLeft:'auto',color:'var(--muted)',fontSize:16}}>→</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="fu3">
+          <div className="card ic" style={{marginBottom:16}}>
+            <p className="ic-t">📊 Key Constitutional Facts</p>
+            <div style={{display:'flex',flexDirection:'column',gap:8}}>
+              {[['Adopted','26 November 1949'],['Enforced','26 January 1950'],['Principal Author','Dr. B.R. Ambedkar'],['Total Amendments','106'],['Languages','Hindi & English']].map(([k,v])=>(
+                <div key={k} className="fr"><span className="fk">{k}</span><span className="fv" style={{color:k==='Total Amendments'?'var(--saffron)':'var(--gold)'}}>{v}</span></div>
+              ))}
+            </div>
+          </div>
+          <div className="card ic">
+            <p className="ic-t">🔑 Preamble Keywords</p>
+            <div className="kws">
+              {['Sovereign','Socialist','Secular','Democratic','Republic','Justice','Liberty','Equality','Fraternity'].map(w=>(
+                <span key={w} className="kw">{w}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* === PREAMBLE === */
+const PWORDS = {SOVEREIGN:{c:'#FF671F',d:'India is supreme in internal matters and free from external control.'},SOCIALIST:{c:'#C9A84C',d:'Added in 1976; aims to eliminate inequality of income and status.'},SECULAR:{c:'#046A38',d:"Added in 1976; the state treats all religions equally with no official state religion."},DEMOCRATIC:{c:'#000080',d:'Government is elected by the people through universal adult franchise.'},REPUBLIC:{c:'#8B0000',d:'The head of state (President) is elected, not hereditary.'},JUSTICE:{c:'#4B0082',d:'Social, economic and political justice for all citizens.'},LIBERTY:{c:'#FF671F',d:'Liberty of thought, expression, belief, faith and worship.'},EQUALITY:{c:'#C9A84C',d:'Equality of status and opportunity for all citizens.'},FRATERNITY:{c:'#046A38',d:'Brotherhood among citizens ensuring dignity of individuals and national unity.'}};
+const PTEXT = "WE, THE PEOPLE OF INDIA, having solemnly resolved to constitute India into a SOVEREIGN SOCIALIST SECULAR DEMOCRATIC REPUBLIC and to secure to all its citizens: JUSTICE, social, economic and political; LIBERTY of thought, expression, belief, faith and worship; EQUALITY of status and of opportunity; and to promote among them all FRATERNITY assuring the dignity of the individual and the unity and integrity of the Nation; IN OUR CONSTITUENT ASSEMBLY this twenty-sixth day of November, 1949, do HEREBY ADOPT, ENACT AND GIVE TO OURSELVES THIS CONSTITUTION.";
+function Preamble() {
+  const [hov,setHov] = useState(null);
+  const renderP = () => {
+    const kps = [];
+    Object.keys(PWORDS).forEach(kw=>{
+      let idx = PTEXT.indexOf(kw,0);
+      while(idx!==-1){kps.push({kw,idx,end:idx+kw.length});idx=PTEXT.indexOf(kw,idx+1);}
+    });
+    kps.sort((a,b)=>a.idx-b.idx);
+    const parts = []; let last = 0;
+    kps.forEach(({kw,idx,end})=>{
+      if(idx>=last){
+        if(idx>last) parts.push(<span key={`t${idx}`}>{PTEXT.slice(last,idx)}</span>);
+        parts.push(<span key={`k${idx}`} className="pk" style={{color:PWORDS[kw].c,borderBottomColor:PWORDS[kw].c}} onMouseEnter={()=>setHov(kw)} onMouseLeave={()=>setHov(null)}>{kw}</span>);
+        last=end;
+      }
+    });
+    if(last<PTEXT.length) parts.push(<span key="end">{PTEXT.slice(last)}</span>);
+    return parts;
+  };
+  return (
+    <div style={{padding:'28px 32px'}}>
+      <h2 className="fu" style={{fontFamily:'Playfair Display',fontSize:28,marginBottom:6}}>The Preamble</h2>
+      <p className="fu" style={{color:'var(--muted)',fontSize:14,marginBottom:24}}>The philosophical foundation of the Indian Constitution — adopted 26 November 1949</p>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 280px',gap:22,marginBottom:22}}>
+        <div className="card pd fu1">
+          <div className="dh2">
+            <div className="as">
+              {[...Array(24)].map((_,i)=><div key={i} className="sp" style={{transform:`rotate(${i*15}deg)`}}/>)}
+              <div className="ck-c"/>
+            </div>
+            <div><p className="hd">प्रस्तावना</p><p className="he">PREAMBLE TO THE CONSTITUTION OF INDIA</p></div>
+          </div>
+          <div style={{display:'flex',height:4}}>
+            <div style={{background:'var(--saffron)',flex:1}}/><div style={{background:'#ddd',flex:1}}/><div style={{background:'var(--green)',flex:1}}/>
+          </div>
+          <div style={{padding:'24px 28px'}}>
+            <p className="pt">{renderP()}</p>
+          </div>
+          <div style={{padding:'16px 28px',borderTop:'1px solid var(--border)',textAlign:'right',fontFamily:'Playfair Display',fontStyle:'italic',color:'var(--muted)',fontSize:12}}>
+            <p>IN OUR CONSTITUENT ASSEMBLY</p>
+            <p style={{color:'var(--gold)',fontSize:14}}>26th November, 1949</p>
+          </div>
+        </div>
+        <div className="fu2">
+          <h4 style={{fontFamily:'Playfair Display',fontSize:17,marginBottom:6}}>Key Concepts</h4>
+          <p style={{fontSize:11,color:'var(--muted)',marginBottom:12}}>Hover over highlighted words in the Preamble</p>
+          <div style={{display:'flex',flexDirection:'column',gap:7}}>
+            {Object.entries(PWORDS).map(([kw,{c,d}])=>(
+              <div key={kw} className="card" style={{padding:'10px 12px',borderColor:hov===kw?c:'var(--border)',background:hov===kw?`${c}11`:'var(--glass)',transition:'all .2s'}}>
+                <div style={{display:'flex',alignItems:'center',gap:7,marginBottom:3}}>
+                  <span style={{width:7,height:7,borderRadius:'50%',background:c,flexShrink:0,display:'inline-block'}}/>
+                  <span style={{color:c,fontWeight:700,fontSize:12}}>{kw}</span>
+                </div>
+                <p style={{fontSize:11,color:'var(--muted)',paddingLeft:14}}>{d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="card fu3" style={{padding:20,display:'flex',gap:14,background:'rgba(201,168,76,0.06)'}}>
+        <span style={{fontSize:20,flexShrink:0}}>ℹ️</span>
+        <div>
+          <p style={{fontWeight:700,color:'var(--gold)',marginBottom:5,fontSize:14}}>42nd Constitutional Amendment (1976)</p>
+          <p style={{fontSize:13,color:'rgba(253,246,227,.85)',lineHeight:1.7}}>The words <strong>"SOCIALIST"</strong>, <strong>"SECULAR"</strong>, and <strong>"INTEGRITY"</strong> were added to the Preamble. The Supreme Court in <em>Kesavananda Bharati v. State of Kerala (1973)</em> held that the Preamble is part of the Constitution.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* === FUNDAMENTAL RIGHTS === */
+function FundamentalRights() {
+  const [sel,setSel] = useState(0);
+  const r = DATA.rights[sel];
+  return (
+    <div style={{padding:'28px 32px'}}>
+      <h2 className="fu" style={{fontFamily:'Playfair Display',fontSize:28,marginBottom:6}}>Fundamental Rights</h2>
+      <p className="fu" style={{color:'var(--muted)',fontSize:14,marginBottom:22}}>Part III of the Constitution — Articles 12–35 — cornerstone of individual liberty in India</p>
+      <div style={{display:'grid',gridTemplateColumns:'280px 1fr',gap:18,marginBottom:26}}>
+        <div className="rl fu1">
+          {DATA.rights.map((ri,i)=>(
+            <button key={i} className={`rc ${sel===i?'active':''}`}
+              style={sel===i?{borderColor:ri.color,background:`${ri.color}11`}:{}}
+              onClick={()=>setSel(i)}>
+              <div className="rci" style={{background:`${ri.color}22`,color:ri.color}}>{ri.icon}</div>
+              <div><p className="ra" style={{color:ri.color}}>{ri.art}</p><p className="rti">{ri.title}</p></div>
+              <span style={{marginLeft:'auto',color:sel===i?ri.color:'var(--muted)',fontSize:16}}>→</span>
+            </button>
+          ))}
+        </div>
+        <div className="card rd fu2" key={sel}>
+          <div className="rdh" style={{background:`${r.color}18`,borderBottom:`1px solid ${r.color}33`}}>
+            <div className="rdi" style={{background:`${r.color}30`,color:r.color}}>{r.icon}</div>
+            <div>
+              <p className="ra" style={{color:r.color,marginBottom:3}}>{r.art}</p>
+              <h3 style={{fontFamily:'Playfair Display',fontSize:21,color:'var(--cream)'}}>{r.title}</h3>
+            </div>
+          </div>
+          <div style={{padding:24}}>
+            <p style={{fontSize:14,lineHeight:1.8,color:'rgba(253,246,227,.85)',marginBottom:20}}>{r.desc}</p>
+            <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
+              <div style={{width:3,height:16,background:r.color,borderRadius:2}}/><p style={{fontWeight:700,fontSize:13,color:r.color}}>Key Provisions</p>
+            </div>
+            <div style={{display:'flex',flexDirection:'column',gap:8}}>
+              {r.pts.map((p,i)=>(
+                <div key={i} style={{display:'flex',alignItems:'flex-start',gap:10,fontSize:13,lineHeight:1.6,color:'rgba(253,246,227,.85)'}}>
+                  <div className="qdot" style={{background:r.color}}/><p>{p}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="fu3">
+        <h3 style={{fontFamily:'Playfair Display',fontSize:19,marginBottom:14}}>Rights at a Glance</h3>
+        <div className="g3">
+          {DATA.rights.map((ri,i)=>(
+            <div key={i} className="card" onClick={()=>setSel(i)} style={{padding:18,cursor:'pointer',borderTop:`3px solid ${ri.color}`,textAlign:'center'}}>
+              <span style={{fontSize:26}}>{ri.icon}</span>
+              <p style={{fontWeight:700,fontSize:13,margin:'6px 0 2px'}}>{ri.title}</p>
+              <p style={{fontSize:11,color:ri.color,fontWeight:700}}>{ri.art}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* === DUTIES === */
+function FundamentalDuties() {
+  return (
+    <div style={{padding:'28px 32px'}}>
+      <h2 className="fu" style={{fontFamily:'Playfair Display',fontSize:28,marginBottom:6}}>Fundamental Duties</h2>
+      <p className="fu" style={{color:'var(--muted)',fontSize:14,marginBottom:22}}>Article 51-A — Part IV-A, added by the 42nd Amendment (1976). 11th duty added by 86th Amendment (2002).</p>
+      <div className="g2 fu1" style={{marginBottom:24}}>
+        <div className="card" style={{padding:22,background:'rgba(255,103,31,.08)',borderColor:'rgba(255,103,31,.2)'}}>
+          <h4 style={{fontFamily:'Playfair Display',fontSize:17,marginBottom:8,color:'var(--saffron)'}}>📋 Background</h4>
+          <p style={{fontSize:13,lineHeight:1.8,color:'rgba(253,246,227,.8)'}}>Fundamental Duties were not in the original Constitution. Added by the 42nd Amendment (1976) based on the Swaran Singh Committee recommendations.</p>
+        </div>
+        <div className="card" style={{padding:22,background:'rgba(4,106,56,.08)',borderColor:'rgba(4,106,56,.2)'}}>
+          <h4 style={{fontFamily:'Playfair Display',fontSize:17,marginBottom:8,color:'var(--green)'}}>⚠️ Nature</h4>
+          <p style={{fontSize:13,lineHeight:1.8,color:'rgba(253,246,227,.8)'}}>Unlike Fundamental Rights, Fundamental Duties are <strong>non-justiciable</strong> — courts cannot enforce them. They serve as a moral obligation on citizens.</p>
+        </div>
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:10}}>
+        {DATA.duties.map((d,i)=>(
+          <div key={i} className="card fu" style={{padding:'14px 18px',display:'flex',gap:14,alignItems:'flex-start',animationDelay:`${i*.04}s`}}>
+            <div style={{width:36,height:36,borderRadius:8,background:'rgba(201,168,76,.15)',color:'var(--gold)',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Playfair Display',fontWeight:700,fontSize:15,flexShrink:0}}>{i+1}</div>
+            <div>
+              <p style={{fontSize:10,letterSpacing:2,textTransform:'uppercase',color:'var(--gold)',marginBottom:3}}>Duty {i+1}</p>
+              <p style={{fontSize:13,lineHeight:1.7,color:'rgba(253,246,227,.9)'}}>{d}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* === AMENDMENTS === */
+function Amendments() {
+  const [f,setF] = useState('all');
+  const amends = f==='key' ? DATA.amendments.filter(a=>a.hl) : DATA.amendments;
+  return (
+    <div style={{padding:'28px 32px'}}>
+      <div className="fu" style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:22,flexWrap:'wrap',gap:12}}>
+        <div><h2 style={{fontFamily:'Playfair Display',fontSize:28,marginBottom:4}}>Constitutional Amendments</h2>
+          <p style={{color:'var(--muted)',fontSize:14}}>India has seen 106 amendments since 1950</p></div>
+        <div style={{display:'flex',gap:6,padding:4,background:'rgba(0,0,0,.3)',borderRadius:10,border:'1px solid var(--border)'}}>
+          {['all','key'].map(opt=>(
+            <button key={opt} onClick={()=>setF(opt)} style={{padding:'7px 16px',borderRadius:7,fontFamily:'Mukta',fontSize:13,fontWeight:600,cursor:'pointer',border:'none',background:f===opt?'var(--gold)':'transparent',color:f===opt?'var(--navy)':'var(--muted)',transition:'all .2s'}}>
+              {opt==='all'?'All Amendments':'Landmark Only'}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div style={{display:'flex',flexDirection:'column',gap:9}}>
+        {amends.map((a,i)=>(
+          <div key={i} className="card fu" style={{padding:'14px 20px',display:'flex',gap:16,alignItems:'center',borderLeft:a.hl?'3px solid var(--saffron)':'3px solid transparent',animationDelay:`${i*.04}s`}}>
+            <p style={{fontFamily:'Playfair Display',fontWeight:700,fontSize:14,color:a.hl?'var(--saffron)':'var(--gold)',width:130,flexShrink:0}}>{a.n}</p>
+            <p style={{fontSize:13,color:'rgba(253,246,227,.85)',flex:1}}>{a.d}</p>
+            {a.hl && <span className="badge" style={{background:'rgba(255,103,31,.2)',color:'var(--saffron)',flexShrink:0}}>Landmark</span>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* === TIMELINE === */
+function Timeline() {
+  return (
+    <div style={{padding:'28px 32px'}}>
+      <h2 className="fu" style={{fontFamily:'Playfair Display',fontSize:28,marginBottom:6}}>Constitutional Timeline</h2>
+      <p className="fu" style={{color:'var(--muted)',fontSize:14,marginBottom:26}}>Key milestones in India's constitutional journey from 1946 to present</p>
+      <div style={{maxWidth:680,margin:'0 auto',display:'flex',flexDirection:'column'}}>
+        {DATA.timeline.map((t,i)=>(
+          <div key={i} className="fu" style={{display:'grid',gridTemplateColumns:'80px 30px 1fr',animationDelay:`${i*.06}s`}}>
+            <div style={{display:'flex',justifyContent:'flex-end',paddingRight:12,paddingTop:14}}>
+              <p style={{fontFamily:'Playfair Display',fontSize:17,fontWeight:700,color:'var(--gold)'}}>{t.yr}</p>
+            </div>
+            <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+              <div style={{width:14,height:14,borderRadius:'50%',background:'var(--saffron)',border:'2px solid var(--navy)',boxShadow:'0 0 0 3px rgba(255,103,31,.3)',marginTop:14,flexShrink:0}}/>
+              {i<DATA.timeline.length-1 && <div style={{flex:1,width:2,background:'linear-gradient(to bottom, var(--saffron), transparent)',minHeight:40}}/>}
+            </div>
+            <div className="card" style={{padding:'11px 15px',margin:'8px 0 8px 12px',fontSize:13,lineHeight:1.6}}>{t.ev}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* === QUIZ === */
+function Quiz() {
+  const [phase,setPhase] = useState('start');
+  const [cur,setCur] = useState(0);
+  const [answers,setAnswers] = useState([]);
+  const [sel,setSel] = useState(null);
+  const [showE,setShowE] = useState(false);
+  const q = DATA.quiz[cur];
+  const score = answers.filter((a,i)=>a===DATA.quiz[i].ans).length;
+  const start = () => { setPhase('quiz');setCur(0);setAnswers([]);setSel(null);setShowE(false); };
+  const pick = (i) => { if(sel!==null)return; setSel(i);setShowE(true); };
+  const next = () => {
+    const na = [...answers, sel];
+    setAnswers(na);
+    if(cur+1>=DATA.quiz.length){setPhase('result');}
+    else{setCur(cur+1);setSel(null);setShowE(false);}
+  };
+  const grade = (s,t) => {
+    const p=(s/t)*100;
+    if(p>=87) return {lb:'Excellent! 🏆',c:'#046A38',d:'You have mastered the Indian Constitution!'};
+    if(p>=62) return {lb:'Good 🌟',c:'#C9A84C',d:'Solid knowledge. Review a few more articles.'};
+    if(p>=37) return {lb:'Fair 📚',c:'#FF671F',d:'Keep studying. Try reading the highlighted sections.'};
+    return {lb:'Needs Work 💪',c:'#8B0000',d:'Start with Fundamental Rights and the Preamble.'};
+  };
+  if(phase==='start') return (
+    <div style={{padding:'28px 32px',display:'flex',justifyContent:'center'}}>
+      <div className="fu" style={{maxWidth:560,width:'100%',textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center',gap:16}}>
+        <span style={{fontSize:60,animation:'pulse 2s ease infinite'}}>🧠</span>
+        <h2 style={{fontFamily:'Playfair Display',fontSize:28}}>Constitutional Knowledge Quiz</h2>
+        <p style={{color:'var(--muted)',fontSize:14,lineHeight:1.7,maxWidth:440}}>{DATA.quiz.length} questions covering Fundamental Rights, Amendments, historical facts and more.</p>
+        <div className="g4" style={{width:'100%',margin:'8px 0'}}>
+          {[['❓',DATA.quiz.length,'Questions'],['⏱️','~8','Minutes'],['📊','MCQ','Format'],['🎯','1 pt','Per Question']].map(([ic,v,lb])=>(
+            <div key={lb} className="card" style={{padding:16,textAlign:'center'}}>
+              <div style={{fontSize:22,marginBottom:4}}>{ic}</div>
+              <p style={{fontFamily:'Playfair Display',fontSize:20,color:'var(--gold)',fontWeight:700}}>{v}</p>
+              <p style={{fontSize:11,color:'var(--muted)'}}>{lb}</p>
+            </div>
+          ))}
+        </div>
+        <button className="btn btn-p" style={{fontSize:15,padding:'13px 34px'}} onClick={start}>Start Quiz →</button>
+      </div>
+    </div>
+  );
+  if(phase==='result') {
+    const g=grade(score,DATA.quiz.length);
+    return (
+      <div style={{padding:'28px 32px',display:'flex',justifyContent:'center'}}>
+        <div className="fu" style={{maxWidth:640,width:'100%',display:'flex',flexDirection:'column',alignItems:'center',gap:12}}>
+          <div style={{width:88,height:88,borderRadius:'50%',background:`${g.c}22`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:42}}>{g.lb.split(' ')[1]}</div>
+          <h2 style={{fontFamily:'Playfair Display',fontSize:32,color:g.c}}>{g.lb.split(' ')[0]}</h2>
+          <div style={{display:'flex',alignItems:'baseline',gap:6}}>
+            <span style={{fontFamily:'Playfair Display',fontSize:64,fontWeight:700,color:g.c,lineHeight:1}}>{score}</span>
+            <span style={{fontSize:36,color:'var(--muted)'}}>/{DATA.quiz.length}</span>
+          </div>
+          <p style={{color:'var(--muted)',fontSize:14}}>{g.d}</p>
+          <div className="card" style={{width:'100%',padding:'15px 18px',textAlign:'center'}}>
+            <div style={{height:8,background:'rgba(255,255,255,.08)',borderRadius:8,overflow:'hidden'}}>
+              <div style={{height:'100%',width:`${(score/DATA.quiz.length)*100}%`,background:g.c,borderRadius:8,transition:'width 1s ease'}}/>
+            </div>
+            <p style={{fontSize:11,color:'var(--muted)',marginTop:6}}>{Math.round((score/DATA.quiz.length)*100)}% score</p>
+          </div>
+          <div style={{width:'100%'}}>
+            <h4 style={{fontFamily:'Playfair Display',fontSize:17,marginBottom:12}}>Answer Review</h4>
+            {DATA.quiz.map((qq,i)=>(
+              <div key={i} className="card" style={{padding:16,marginBottom:10,borderLeft:`3px solid ${answers[i]===qq.ans?'#046A38':'#8B0000'}`}}>
+                <div style={{display:'flex',gap:10,alignItems:'flex-start',marginBottom:6}}>
+                  <span style={{background:'rgba(255,255,255,.08)',fontSize:10,fontWeight:700,padding:'2px 6px',borderRadius:4,flexShrink:0,marginTop:2}}>Q{i+1}</span>
+                  <p style={{flex:1,fontSize:13,fontWeight:600}}>{qq.q}</p>
+                  <span style={{fontSize:16}}>{answers[i]===qq.ans?'✅':'❌'}</span>
+                </div>
+                <p style={{fontSize:12,color:'var(--muted)',marginBottom:3}}>Your answer: <strong style={{color:answers[i]===qq.ans?'#046A38':'#8B0000'}}>{qq.opts[answers[i]]}</strong></p>
+                {answers[i]!==qq.ans && <p style={{fontSize:12,color:'var(--muted)',marginBottom:4}}>Correct: <strong style={{color:'#046A38'}}>{qq.opts[qq.ans]}</strong></p>}
+                <p style={{fontSize:12,color:'rgba(253,246,227,.6)',fontStyle:'italic'}}>{qq.exp}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{display:'flex',gap:12,justifyContent:'center'}}>
+            <button className="btn btn-p" onClick={start}>Try Again</button>
+            <button className="btn btn-o" onClick={()=>setPhase('start')}>Back to Start</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div style={{padding:'28px 32px',display:'flex',justifyContent:'center'}}>
+      <div className="fu" style={{maxWidth:640,width:'100%'}}>
+        <div style={{marginBottom:18}}>
+          <div style={{height:4,background:'rgba(255,255,255,.08)',borderRadius:4,overflow:'hidden',marginBottom:7}}>
+            <div style={{height:'100%',width:`${(cur/DATA.quiz.length)*100}%`,background:'linear-gradient(to right,var(--saffron),var(--gold))',borderRadius:4,transition:'width .4s ease'}}/>
+          </div>
+          <p style={{fontSize:11,color:'var(--muted)',textAlign:'right'}}>Question {cur+1} of {DATA.quiz.length}</p>
+        </div>
+        <div className="card" style={{padding:28}}>
+          <span className="badge" style={{background:'rgba(255,103,31,.2)',color:'var(--saffron)',marginBottom:14,display:'inline-block'}}>Question {cur+1}</span>
+          <h3 style={{fontFamily:'Playfair Display',fontSize:21,lineHeight:1.4,marginBottom:22}}>{q.q}</h3>
+          <div style={{display:'flex',flexDirection:'column',gap:10}}>
+            {q.opts.map((opt,i)=>{
+              let cls='qopt';
+              if(sel!==null){if(i===q.ans)cls+=' oc';else if(i===sel)cls+=' ow';else cls+=' od';}
+              return (
+                <button key={i} className={cls} onClick={()=>pick(i)}>
+                  <span className="ol">{String.fromCharCode(65+i)}</span>
+                  <span style={{flex:1}}>{opt}</span>
+                  {sel!==null&&i===q.ans&&<span style={{color:'#046A38',fontWeight:700}}>✓</span>}
+                  {sel!==null&&i===sel&&i!==q.ans&&<span style={{color:'#8B0000',fontWeight:700}}>✗</span>}
+                </button>
+              );
+            })}
+          </div>
+          {showE && (
+            <div className="qe" style={{borderColor:sel===q.ans?'#046A38':'#FF671F'}}>
+              <span style={{fontSize:18}}>{sel===q.ans?'✅':'❌'}</span>
+              <p>{q.exp}</p>
+            </div>
+          )}
+          {sel!==null && (
+            <button className="btn btn-p" style={{marginTop:18,width:'100%',justifyContent:'center'}} onClick={next}>
+              {cur+1===DATA.quiz.length?'See Results':'Next Question →'}
+            </button>
+          )}
+        </div>
+        <div style={{display:'flex',justifyContent:'center',gap:6,marginTop:18}}>
+          {DATA.quiz.map((_,i)=>(
+            <div key={i} style={{width:8,height:8,borderRadius:'50%',background:i<cur?'#046A38':i===cur?'var(--saffron)':'rgba(255,255,255,.12)',transition:'all .3s',transform:i===cur?'scale(1.3)':'scale(1)'}}/>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* === DPSP === */
+function DPSP() {
+  const dpsp=[{art:'Art. 38',t:'Social Order for Welfare',d:'State shall strive to promote welfare of people by securing and protecting a social order of justice.'},{art:'Art. 39',t:'Equal Pay for Equal Work',d:'State to direct policy towards equal pay for equal work for both men and women.'},{art:'Art. 44',t:'Uniform Civil Code',d:'State shall endeavour to secure a Uniform Civil Code for all citizens.'},{art:'Art. 45',t:'Early Childhood Care',d:'Provision for early childhood care and education to all children below age six.'},{art:'Art. 48',t:'Agriculture & Animal Husbandry',d:'State shall endeavour to organize agriculture and animal husbandry on modern scientific lines.'},{art:'Art. 51',t:'International Peace',d:'State shall promote international peace and security, maintain just and honourable relations between nations.'}];
+  return (
+    <div style={{padding:'28px 32px'}}>
+      <h2 className="fu" style={{fontFamily:'Playfair Display',fontSize:28,marginBottom:6}}>Directive Principles of State Policy</h2>
+      <p className="fu" style={{color:'var(--muted)',fontSize:14,marginBottom:22}}>Part IV (Articles 36–51) — inspired by the Irish Constitution. Non-justiciable but fundamental to governance.</p>
+      <div className="card fu1" style={{padding:20,marginBottom:24,background:'rgba(0,0,128,.1)',borderColor:'rgba(0,0,128,.3)'}}>
+        <p style={{fontSize:14,lineHeight:1.8,color:'rgba(253,246,227,.85)'}}><strong style={{color:'var(--gold)'}}>Key distinction:</strong> Unlike Fundamental Rights (justiciable), DPSPs are <strong>non-justiciable</strong>. In <em>Minerva Mills v. Union of India (1980)</em>, the Supreme Court held both must be in harmony.</p>
+      </div>
+      <div className="g3 fu2" style={{marginBottom:24}}>
+        {dpsp.map((d,i)=>(
+          <div key={i} className="card" style={{padding:19,borderTop:'3px solid var(--gold)'}}>
+            <p style={{fontSize:11,fontWeight:700,letterSpacing:1,color:'var(--gold)',marginBottom:7}}>{d.art}</p>
+            <h4 style={{fontFamily:'Playfair Display',fontSize:15,marginBottom:7}}>{d.t}</h4>
+            <p style={{fontSize:13,color:'var(--muted)',lineHeight:1.7}}>{d.d}</p>
+          </div>
+        ))}
+      </div>
+      <div className="card fu3" style={{padding:22}}>
+        <h4 style={{fontFamily:'Playfair Display',fontSize:18,marginBottom:14,color:'var(--saffron)'}}>Categories of DPSPs</h4>
+        <div className="g3">
+          {[{lb:'Socialistic',c:'#046A38',d:'Promote welfare of people — Art. 38, 39, 41, 42, 43, 43A, 47'},{lb:'Gandhian',c:'#FF671F',d:'Based on Gandhian philosophy — Art. 40, 43, 43B, 46, 47, 48'},{lb:'Liberal-Intellectual',c:'#000080',d:'Based on liberal ideology — Art. 44, 45, 48, 48A, 49, 50, 51'}].map(c=>(
+            <div key={c.lb} style={{padding:14,background:`${c.c}11`,borderRadius:10,border:`1px solid ${c.c}33`}}>
+              <p style={{color:c.c,fontWeight:700,marginBottom:5,fontSize:14}}>{c.lb}</p>
+              <p style={{fontSize:12,color:'var(--muted)'}}>{c.d}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* === DISCUSSIONS === */
+function Discussions() {
+  const [posts,setPosts] = useState(DATA.posts);
+  const [np,setNp] = useState({title:'',body:''});
+  const [showF,setShowF] = useState(false);
+  const post = () => {
+    if(!np.title||!np.body) return;
+    setPosts([{id:Date.now(),u:'You',role:'User',av:'✏️',time:'Just now',title:np.title,body:np.body,r:0,l:0},...posts]);
+    setNp({title:'',body:''});setShowF(false);
+  };
+  return (
+    <div style={{padding:'28px 32px'}}>
+      <div className="fu" style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:22,flexWrap:'wrap',gap:10}}>
+        <div><h2 style={{fontFamily:'Playfair Display',fontSize:28,marginBottom:4}}>Discussion Forum</h2>
+          <p style={{color:'var(--muted)',fontSize:14}}>Engage with the constitutional community</p></div>
+        <button className="btn btn-p" onClick={()=>setShowF(!showF)}>✍️ New Post</button>
+      </div>
+      {showF && (
+        <div className="card fu" style={{padding:22,marginBottom:18,borderColor:'rgba(255,103,31,.3)'}}>
+          <h4 style={{fontFamily:'Playfair Display',fontSize:17,marginBottom:12}}>Create Post</h4>
+          <input value={np.title} onChange={e=>setNp({...np,title:e.target.value})} placeholder="Post title..." style={{width:'100%',background:'rgba(255,255,255,.06)',border:'1px solid var(--border)',borderRadius:8,padding:'9px 13px',color:'var(--cream)',fontFamily:'Mukta',fontSize:14,marginBottom:9,outline:'none'}}/>
+          <textarea value={np.body} onChange={e=>setNp({...np,body:e.target.value})} placeholder="Share your thoughts on the Constitution..." style={{width:'100%',background:'rgba(255,255,255,.06)',border:'1px solid var(--border)',borderRadius:8,padding:'9px 13px',color:'var(--cream)',fontFamily:'Mukta',fontSize:14,outline:'none',resize:'vertical',minHeight:90}}/>
+          <div style={{display:'flex',gap:10,marginTop:11}}>
+            <button className="btn btn-p" onClick={post}>Post</button>
+            <button className="btn btn-g" onClick={()=>setShowF(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+      <div style={{display:'flex',flexDirection:'column',gap:12}}>
+        {posts.map((p,i)=>(
+          <div key={p.id} className="card fu" style={{padding:22,animationDelay:`${i*.07}s`}}>
+            <div style={{display:'flex',gap:12,marginBottom:10,alignItems:'flex-start'}}>
+              <div style={{width:38,height:38,borderRadius:9,background:'rgba(201,168,76,.15)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:18,flexShrink:0}}>{p.av}</div>
+              <div style={{flex:1}}>
+                <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap',marginBottom:3}}>
+                  <span style={{fontWeight:700,fontSize:14}}>{p.u}</span>
+                  <span className="badge" style={{background:'rgba(201,168,76,.15)',color:'var(--gold)',fontSize:10}}>{p.role}</span>
+                  <span style={{color:'var(--muted)',fontSize:11}}>{p.time}</span>
+                </div>
+                <h4 style={{fontFamily:'Playfair Display',fontSize:16}}>{p.title}</h4>
+              </div>
+            </div>
+            <p style={{fontSize:13,color:'rgba(253,246,227,.75)',lineHeight:1.7,marginBottom:12}}>{p.body}</p>
+            <div style={{display:'flex',gap:14,fontSize:12,color:'var(--muted)'}}>
+              <span>💬 {p.r} replies</span><span>❤️ {p.l} likes</span>
+              <button style={{background:'none',border:'none',color:'var(--gold)',cursor:'pointer',fontSize:12,fontFamily:'Mukta'}}>Reply</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* === ADMIN === */
+function AdminPanel() {
+  const users=[{n:'Dr. Priya Sharma',r:'Legal Expert',s:'Active',p:24},{n:'Prof. Arun Kumar',r:'Educator',s:'Active',p:47},{n:'Rahul Singh',r:'Citizen',s:'Active',p:12},{n:'Kavita Nair',r:'Educator',s:'Pending',p:0}];
+  const rc={'Legal Expert':'#C9A84C','Educator':'#FF671F','Citizen':'#046A38'};
+  return (
+    <div style={{padding:'28px 32px'}}>
+      <h2 className="fu" style={{fontFamily:'Playfair Display',fontSize:28,marginBottom:6}}>Admin Panel</h2>
+      <p className="fu" style={{color:'var(--muted)',fontSize:14,marginBottom:22}}>Manage users, roles, and platform content</p>
+      <div className="g4 fu1" style={{marginBottom:24}}>
+        {[['👥','1,247','Total Users','#FF671F'],['🟢','89','Active Today','#046A38'],['📝','342','Posts Published','#C9A84C'],['⏳','7','Pending Review','#000080']].map(([ic,v,lb,c])=>(
+          <div key={lb} className="card" style={{padding:16,display:'flex',gap:11,alignItems:'center'}}>
+            <div style={{width:40,height:40,borderRadius:9,background:`${c}22`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:19}}>{ic}</div>
+            <div><p style={{fontFamily:'Playfair Display',fontSize:22,color:c,fontWeight:700,lineHeight:1}}>{v}</p><p style={{fontSize:11,color:'var(--muted)',marginTop:2}}>{lb}</p></div>
+          </div>
+        ))}
+      </div>
+      <div className="card fu2" style={{overflow:'hidden'}}>
+        <div style={{padding:'14px 20px',borderBottom:'1px solid var(--border)',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+          <h4 style={{fontFamily:'Playfair Display',fontSize:17}}>User Management</h4>
+          <button className="btn btn-o" style={{fontSize:12,padding:'5px 13px'}}>+ Invite User</button>
+        </div>
+        <table style={{width:'100%',borderCollapse:'collapse'}}>
+          <thead><tr style={{background:'rgba(255,255,255,.03)'}}>
+            {['Name','Role','Status','Posts','Actions'].map(h=><th key={h} style={{padding:'11px 18px',textAlign:'left',fontSize:10,letterSpacing:1,textTransform:'uppercase',color:'var(--muted)',fontFamily:'Mukta'}}>{h}</th>)}
+          </tr></thead>
+          <tbody>
+            {users.map((u,i)=>(
+              <tr key={i} style={{borderTop:'1px solid var(--border)'}}>
+                <td style={{padding:'13px 18px',fontSize:14,fontWeight:600}}>{u.n}</td>
+                <td style={{padding:'13px 18px'}}><span className="badge" style={{background:`${rc[u.r]||'#666'}22`,color:rc[u.r]||'#666'}}>{u.r}</span></td>
+                <td style={{padding:'13px 18px'}}><span style={{fontSize:12,color:u.s==='Active'?'#046A38':'#C9A84C'}}>● {u.s}</span></td>
+                <td style={{padding:'13px 18px',fontSize:13,color:'var(--muted)'}}>{u.p}</td>
+                <td style={{padding:'13px 18px'}}><div style={{display:'flex',gap:6}}><button className="btn btn-g" style={{fontSize:11,padding:'4px 10px'}}>Edit</button><button className="btn btn-g" style={{fontSize:11,padding:'4px 10px',color:'#8B0000',borderColor:'#8B000033'}}>Remove</button></div></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+/* === EDUCATOR HUB === */
+function EducatorHub() {
+  const res=[{t:'Introduction to the Indian Constitution',tp:'Article',r:'2.3K',s:'Published'},{t:'Fundamental Rights — Video Lecture Series',tp:'Video',r:'1.8K',s:'Published'},{t:'Quiz: Constitutional Amendments',tp:'Quiz',r:'956',s:'Draft'},{t:'Directive Principles Explained',tp:'Article',r:'1.1K',s:'Published'}];
+  return (
+    <div style={{padding:'28px 32px'}}>
+      <div className="fu" style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:22,flexWrap:'wrap',gap:10}}>
+        <div><h2 style={{fontFamily:'Playfair Display',fontSize:28,marginBottom:4}}>Educator Hub</h2>
+          <p style={{color:'var(--muted)',fontSize:14}}>Create and manage educational constitutional content</p></div>
+        <button className="btn btn-p">+ Create Content</button>
+      </div>
+      <div className="g3 fu1" style={{marginBottom:24}}>
+        {[['📄','14','My Articles'],['👁️','6.2K','Total Reads'],['🎓','8','Sessions']].map(([ic,v,lb])=>(
+          <div key={lb} className="card" style={{padding:22,textAlign:'center'}}>
+            <div style={{fontSize:30,marginBottom:7}}>{ic}</div>
+            <p style={{fontFamily:'Playfair Display',fontSize:30,color:'var(--gold)',fontWeight:700}}>{v}</p>
+            <p style={{fontSize:12,color:'var(--muted)'}}>{lb}</p>
+          </div>
+        ))}
+      </div>
+      <div className="card fu2" style={{overflow:'hidden'}}>
+        <div style={{padding:'14px 20px',borderBottom:'1px solid var(--border)'}}><h4 style={{fontFamily:'Playfair Display',fontSize:17}}>My Resources</h4></div>
+        {res.map((r,i)=>(
+          <div key={i} style={{padding:'14px 20px',borderBottom:'1px solid var(--border)',display:'flex',gap:12,alignItems:'center'}}>
+            <div style={{width:38,height:38,borderRadius:8,background:'rgba(255,103,31,.15)',color:'var(--saffron)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:15,flexShrink:0}}>{r.tp==='Article'?'📄':r.tp==='Video'?'🎬':'❓'}</div>
+            <div style={{flex:1}}><p style={{fontWeight:600,fontSize:14}}>{r.t}</p><p style={{fontSize:11,color:'var(--muted)'}}>{r.tp} · {r.r} reads</p></div>
+            <span className="badge" style={{background:r.s==='Published'?'rgba(4,106,56,.2)':'rgba(201,168,76,.15)',color:r.s==='Published'?'#046A38':'#C9A84C'}}>{r.s}</span>
+            <button className="btn btn-g" style={{fontSize:11,padding:'4px 10px'}}>Edit</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* === LEGAL === */
+function LegalInsights() {
+  const ac={'Constitutional Amendment':'#FF671F','Fundamental Rights':'#C9A84C','Equality & Reservations':'#046A38','Federalism':'#000080'};
+  return (
+    <div style={{padding:'28px 32px'}}>
+      <h2 className="fu" style={{fontFamily:'Playfair Display',fontSize:28,marginBottom:6}}>Legal Insights</h2>
+      <p className="fu" style={{color:'var(--muted)',fontSize:14,marginBottom:22}}>Landmark Supreme Court cases shaping constitutional interpretation</p>
+      <div style={{display:'flex',flexDirection:'column',gap:13}}>
+        {DATA.cases.map((c,i)=>(
+          <div key={i} className="card fu" style={{padding:22,borderLeft:`3px solid ${ac[c.area]||'var(--gold)'}`,animationDelay:`${i*.1}s`}}>
+            <h4 style={{fontFamily:'Playfair Display',fontSize:17,marginBottom:8}}>{c.n}</h4>
+            <div style={{display:'flex',gap:10,flexWrap:'wrap',marginBottom:10}}>
+              <span className="badge" style={{background:`${ac[c.area]}22`,color:ac[c.area]}}>{c.area}</span>
+              <span className="badge" style={{background:'rgba(255,255,255,.07)',color:'var(--muted)'}}>AIR {c.yr} SC</span>
+            </div>
+            <p style={{fontSize:13,lineHeight:1.7,color:'rgba(253,246,227,.85)'}}>{c.sig}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* === MAIN APP === */
+function App() {
+  const [role,setRole] = useState('citizen');
+  const [active,setActive] = useState('dashboard');
+  const sections = {
+    dashboard:<Dashboard role={role} go={setActive}/>,
+    preamble:<Preamble/>,
+    rights:<FundamentalRights/>,
+    duties:<FundamentalDuties/>,
+    dpsp:<DPSP/>,
+    amendments:<Amendments/>,
+    timeline:<Timeline/>,
+    quiz:<Quiz/>,
+    discuss:<Discussions/>,
+    admin:<AdminPanel/>,
+    educator:<EducatorHub/>,
+    legal:<LegalInsights/>,
+  };
+  return (
+    <div className="app-root">
+      <div className="app-bg"/>
+      <Sidebar role={role} setRole={setRole} active={active} setActive={setActive}/>
+      <div className="app-main">
+        <Topbar role={role} active={active}/>
+        <main>{sections[active]||<Dashboard role={role} go={setActive}/>}</main>
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+</body>
+</html>
